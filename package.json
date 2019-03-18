@@ -1,0 +1,29 @@
+{
+  "name": "cloud-note",
+  "version": "1.0.0",
+  "description": "cloud-note",
+  "author": "shel",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^2.6.0",
+    "cross-env": "^5.2.0",
+    "koa": "^2.6.2",
+    "koa-router": "^7.4.0",
+    "mysql2": "^1.6.5",
+    "nuxt": "^2.4.0",
+    "sequelize": "^5.1.0",
+    "vue-quill-editor": "^3.0.6"
+  },
+  "devDependencies": {
+    "node-sass": "^4.11.0",
+    "nodemon": "^1.18.9",
+    "sass-loader": "^7.1.0"
+  }
+}
