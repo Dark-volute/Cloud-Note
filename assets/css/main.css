@@ -205,10 +205,6 @@
    outline: none;
    border: none;
  }
- button:focus{
-  outline: none;
-  border: none;
- }
 
  i{
    cursor: pointer;

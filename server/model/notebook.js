@@ -9,6 +9,7 @@ const NotebookModel = sequelize.define('notebooks', {
         type: UUID,
         primaryKey: true
     },
+    userId:  STRING,
     bookname: {
         type: STRING(20),
     },
@@ -30,23 +31,36 @@ const NotebookModel = sequelize.define('notebooks', {
 NotebookModel.sync()
 
 
-const findAll = async ()=> {
-    return await NotebookModel.findAll()
-}
-
-const create = async ()=> {
+NotebookModel.createNotebook = async (userId,bookname,describe)=> {
     return await NotebookModel.create({
         id: uuid(),
-        bookname:'123',
-        describe: '12'
+        userId,
+        bookname,
+        describe
     })
 }
 
 
-module.exports = {
-    findAll,
-    create
+NotebookModel.findBooks = async (userId)=> {
+    return await NotebookModel.findAll({
+        where: {
+            userId
+        }
+    })
 }
+
+
+
+NotebookModel.deleteNotebook = async (id)=> {
+   await NotebookModel.destroy({
+       where:{
+          id
+       }
+   })
+}
+
+
+module.exports = NotebookModel
 
 
 

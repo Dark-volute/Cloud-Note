@@ -6,21 +6,44 @@
             <h4>Login to Note</h4>
             <form class='dialog-form'>
                 <div>
-                   <input type='text'>
+                   <input type='text' v-model='username'>
                 </div>
                 <div>
-                   <input type='password'>
+                   <input type='password' v-model='password'>
                 </div>
             </form>
             <div class='reset-password'>
                 <span>ForgetPassword？</span>
             </div>
-            <button>登 陆</button>
+            <button @click='login'>登 陆</button>
             <p class='sign-up'>Don't have an account?<span>Sign up</span></p>
         </div>
     </div>
 </div>  
 </template>
+
+<script>
+export default {
+  data(){
+    return {
+      username:'shel',
+      password:'123456'
+    }
+  },
+  methods:{
+    login(){
+      this.$axios.post('/login',{
+        username: this.username,
+        password: this.password
+      }).then(res=>{
+        this.$store.commit('setUser',res.data.data)
+        this.$router.push('/book')
+      })
+    }
+  }
+}
+
+</script>
 
 
 <style lang='scss'>

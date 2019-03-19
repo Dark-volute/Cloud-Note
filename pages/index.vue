@@ -13,8 +13,7 @@
           </div>
         </div>
          <ul class='list'>
-            <li>1</li>
-             <li class='active'>2</li>
+            <li v-for='item in notes' :key='item.id' >{{item.title}}</li>
           </ul>
       </div>
       <div class='editor'>
@@ -47,7 +46,13 @@
 <script>
 import mAside from '@/components/aside.vue'
 export default {
+  async fetch ({ app, store, params }) {
+  },
   async asyncData({ app }) {
+     let res = await app.$axios.get('/note')
+     return {
+       notes: res.data.data
+     }
   }, 
   data() {
     return {

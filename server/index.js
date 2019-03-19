@@ -1,10 +1,15 @@
 const Koa = require('koa')
+const koaBody = require('koa-body');
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const router = require('./router.js')
+const handelError = require('./middleware/handleError')
 const app = new Koa()
 require('./model/index.js')
 
+app.use(koaBody());
+
+app.use(handelError())
 app.use(router.routes(), router.allowedMethods())
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
