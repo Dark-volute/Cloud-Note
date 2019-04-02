@@ -6,8 +6,14 @@
             <m-button @click='addbook'>添加笔记本</m-button>
         </div>
         <ul class='book-list'>
-            <li v-for='item in books' :key='item.id' >{{item.bookname}}
-                <span @click='deleteBook(item.id)'>x</span></li> 
+            <li v-for='item in books' :key='item.id' >
+              <div>
+                <i class='iconfont icon-notebook'></i>
+                <span>{{item.bookname}}</span>
+                <span class='describe'>{{item.isDefault ? '默认' : ''}} {{item.describe}}</span>
+                </div>
+                <span @click='deleteBook(item.id)'>x</span>
+            </li> 
         </ul>
     </div>
     <m-layer :visible='visible' class='layer'>
@@ -33,7 +39,7 @@ export default {
   async asyncData({ app }) {
     let res = await app.$axios.get('/notebook')
     return {
-      books: res.data.data
+      books: res.data
     }
   },
   data() {
@@ -47,6 +53,10 @@ export default {
     addbook() {
       this.visible = true
     },
+    async getBooks(){
+        let res = await this.$axios.get('/notebook')
+        this.books = res.data;
+    },
     createbook() {
       this.$axios
         .post('/notebook/create', {
@@ -54,13 +64,14 @@ export default {
           bookname: this.bookname
         })
         .then(res => {
-          this.visible = false
+          this.visible = false;
+          this.getBooks()
         })
     },
     deleteBook(id) {
-      this.$axios
-        .delete(`/notebook/delete/${id}`)
-        .then(res => {})
+      this.$axios.delete(`/notebook/delete/${id}`).then(res => {
+            this.getBooks()
+      })
     }
   }
 }
@@ -80,10 +91,17 @@ export default {
   .book-list {
     padding: 40px;
     li {
+      cursor: pointer;
       margin-bottom: 20px;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .describe {
+      font-size: 12px;
+      color: #ccc;
     }
   }
   .layer {

@@ -12,7 +12,7 @@ const  createAlert = (message,title)=>{
         el: document.createElement('div'),
         data:{
             message: message || '这是一段内容',
-            title: title || '这是标题',
+            title: title || '提示',
         }
     })
     instance.visible = true;

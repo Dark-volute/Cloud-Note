@@ -10,12 +10,8 @@
           <li>
              <i class='iconfont icon-tag'></i>
           </li>
-          <li>
-             <i class='iconfont icon-trash'></i>
-          </li>
-         <li>
-              <i class='iconfont icon-search'></i> 
-          </li>     
+          <nuxt-link to='/trash' tag='li'><i class='iconfont icon-trash'></i> </nuxt-link>
+           <nuxt-link to='/search' tag='li'><i class='iconfont icon-search'></i> </nuxt-link>
         </ul>
         <div class='user' v-if='user'>
           {{user.username}}
@@ -42,12 +38,19 @@ export default {
   flex-basis: 60px;
   background: #f8f8f8;
   padding: 40px 20px;
+  z-index: 1;
   header {
     color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
+  }
+  .info{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .tab-list {
     color: #263d96;

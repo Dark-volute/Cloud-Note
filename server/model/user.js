@@ -28,14 +28,19 @@ const UserModel = sequelize.define('user', {
     },
     username: {
         type: STRING(30),
+        allowNull: false,
     },
     password: {
-        type: STRING(256)
+        type: STRING(256),
+        allowNull: false,
     },
     salt: {
         type: STRING(128)
     },
-    mail: STRING
+    email:{
+        type: STRING,
+        unique: true
+    }
 }, {
     indexes: [
         {
@@ -48,7 +53,14 @@ const UserModel = sequelize.define('user', {
 UserModel.sync()
 
 
-UserModel.register = async (username ,password)=> {
+UserModel.register = async (username ,password,email)=> {
+    const user =  await UserModel.findOne({
+        where: {
+            username
+        }
+    })
+    if(user) throw new Errors.ValidationError('用户名存在')
+    
     const {cryptedPassword, salt} = await genCryptedPassword(password)
     return await UserModel.create({
         id: uuid(),

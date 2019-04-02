@@ -41,6 +41,8 @@ module.exports = {
   */
   plugins: [
     {src:'@/plugins/vue-quill-editor', ssr:false },
+    {src: '@/plugins/axios'},
+    {src: '@/plugins/filter'}
   ],
 
   /*

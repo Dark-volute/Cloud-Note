@@ -24,25 +24,26 @@
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      username:'shel',
-      password:'123456'
+      username: 'shel',
+      password: '123456'
     }
   },
-  methods:{
-    login(){
-      this.$axios.post('/login',{
-        username: this.username,
-        password: this.password
-      }).then(res=>{
-        this.$store.commit('setUser',res.data.data)
-        this.$router.push('/book')
-      })
+  methods: {
+    login() {
+      this.$axios
+        .post('/login', {
+          username: this.username,
+          password: this.password
+        })
+        .then(res => {
+          this.$store.commit('setUser', res.data)
+          this.$router.push('/book')
+        })
     }
   }
 }
-
 </script>
 
 
@@ -57,21 +58,30 @@ export default {
   .dialog {
     height: 500px;
     width: 800px;
-    background: #fff;
     border-radius: 8px;
     display: flex;
+
+    // background: radial-gradient(circle at top right, transparent 5%, #fff 0) top
+    //     right,
+    //   radial-gradient(circle at bottom right, transparent 5%, #fff 0) bottom
+    //     right;
+    // background-size: 50% 50%;
+    // background-repeat: no-repeat;
+
+    background:linear-gradient(to left bottom,transparent 50%,#ddd 0) no-repeat 100% 0 /2em 2em,linear-gradient(-135deg,transparent 1.414em ,#fff 0);
+
     &-left {
       width: 50%;
       background: url('~assets/images/login.png') no-repeat;
       background-size: cover;
       border-radius: 8px 0 0 8px;
       position: relative;
-      &::after{
+      &::after {
         content: '';
         background: #faf7fd;
-        opacity: .7;
+        opacity: 0.7;
         position: absolute;
-        top:0;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
@@ -113,7 +123,8 @@ export default {
         border-radius: 20px;
         background: #7336ff;
         color: #fff;
-          margin-bottom: 30px;
+        margin-bottom: 30px;
+        cursor: pointer;
       }
       .sign-up {
         text-align: center;

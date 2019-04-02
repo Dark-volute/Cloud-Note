@@ -1,28 +1,33 @@
+
 const Sequelize = require('sequelize');
 const {sequelize} = require('./index.js')
 const uuid = require('uuid/v4')
 
-const {STRING, INTEGER, DATE, UUID, Op} = Sequelize
+const {STRING, INTEGER, DATE, UUID, Op,BOOLEAN} = Sequelize
 
 const NotebookModel = sequelize.define('notebooks', {
     id: {
         type: UUID,
         primaryKey: true
     },
-    userId:  STRING,
+    userId: {
+        type:UUID,
+        allowNull: false,
+    } ,
     bookname: {
         type: STRING(20),
     },
     describe: {
         type: STRING(60),
     },
+    isDefault: BOOLEAN,
     created_at: DATE,
     updated_at: DATE
 }, {
     timestamps: false,
     indexes: [
         {
-            fields: ['id'],
+            fields: ['id', 'userId'],
             unique: true
         }
     ]
@@ -32,11 +37,18 @@ NotebookModel.sync()
 
 
 NotebookModel.createNotebook = async (userId,bookname,describe)=> {
+    const { count } = await NotebookModel.findAndCountAll({
+        where: {
+            userId
+        }
+     })
+    const isDefault = count === 0 ? 1 : 0
     return await NotebookModel.create({
         id: uuid(),
         userId,
         bookname,
-        describe
+        describe,
+        isDefault
     })
 }
 
@@ -58,6 +70,17 @@ NotebookModel.deleteNotebook = async (id)=> {
        }
    })
 }
+
+
+NotebookModel.findDefaultBook = async function(){
+    return await NotebookModel.findOne({
+        attributes:['id'],
+        where: {
+            isDefault: 1
+        }
+    })
+}
+
 
 
 module.exports = NotebookModel

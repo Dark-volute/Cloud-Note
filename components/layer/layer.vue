@@ -1,10 +1,10 @@
 <template>
 <transition name="fade">
     <div v-show='visible'>
-    <div class='m-layer'>  
-        <slot></slot> 
+    <div class='m-layer'>
+        <slot></slot>
     </div>
-        <div class="m-modal"></div>
+        <div class="m-shade"></div>
     </div>
 </transition>
 </template>
@@ -33,7 +33,7 @@ export default {
 
 <style lang='scss'>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
+  transition: opacity .1s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
@@ -50,7 +50,7 @@ export default {
   align-items: center;
 }
 
-.m-modal {
+.m-shade {
   position: fixed;
   left: 0;
   top: 0;

@@ -22,6 +22,11 @@ router.delete('/notebook/delete/:id',auth(), NotebookController.deleteNotebook)
 router.get('/note',auth(), NoteController.findAllNotes)
 router.post('/note/create', auth(), NoteController.createNote)
 router.delete('/note/delete/:id',auth(), NoteController.deleteNote)
+router.patch('/note/update/:id',auth(), NoteController.updateNote)
+router.patch('/note/trashOrRecover/:id',auth(), NoteController.trashOrRecoverNote)
+
+router.get('/search/:keyword', NoteController.search)
+
 
 
 
