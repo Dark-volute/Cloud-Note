@@ -8,7 +8,7 @@ const createNote = async function (ctx, next) {
     const {id} = await NoteBookModel.findDefaultBook()
     notebookId = id
   }
-  const userId = ctx.cookies.get('sessionid')
+  const userId = ctx.userId
   const note = await NoteModel.createNote(userId, notebookId, title, content)
   ctx.body = {
     code: 0,
