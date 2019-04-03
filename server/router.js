@@ -1,5 +1,7 @@
 const Router =  require('koa-router')
-const router = new Router()
+const router = new Router({
+    prefix:'/api'
+})
 const auth = require('./middleware/auth')
 const NotebookModel = require('./model/notebook.js')
 
