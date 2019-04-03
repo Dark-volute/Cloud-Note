@@ -7,12 +7,24 @@
               <h3>全部笔记 <i @click='selectBook' class='iconfont icon-arrow-bottom'></i></h3>
               <i @click='addNote' class='iconfont icon-add-note' style='color:#311abf;font-size:24px'></i>
           </div>
-          <ul>
+          <!-- <ul>
             <li v-for='item in books'>{{item.bookname}}</li>
-          </ul>
-          <div class='row'>
-            <h6>2条笔记</h6>
-            <span>选项</span>
+          </ul> -->
+
+      <div class='row'>
+         <h6>2条笔记</h6>
+       <m-popover position="bottom">
+        <span>选项 <i class='iconfont icon-arrow-bottom'></i></span>
+         <template slot="content">
+           <ul class='sort-list'>
+             <li @click='sort("update_date")'>按更新日期排序(最早)</li>
+             <li @click='sort("update_date","DESC")'>按更新日期排序(最新)</li> 
+             <li @click='sort("create_date")'>按创建日期排序(最早)</li> 
+             <li @click='sort("create_date","DESC")'>按创建日期排序(最新)</li> 
+           </ul>   
+         </template>
+        </m-popover>
+        
           </div>
         </div>
          <ul class='list' ref="list">
@@ -21,7 +33,7 @@
                 <h4>{{item.title}}</h4>
                 <span @click='deleteNote(item.id,index)'><i class='iconfont icon-trash'></i></span>
               </div>
-              <time>{{item.update_date | timestampToDate}}</time>
+              <time>{{item.create_date | timestampToDate}}</time>
                <div class='content' v-html='substr(item.content)'></div>
             </li>
           </ul>
@@ -40,7 +52,7 @@
              <i class='iconfont icon-clock'></i>
             <i class='iconfont icon-star'></i>
              <i class='iconfont icon-trash'></i>
-             <i class='iconfont icon-extend'></i>
+             <i class='iconfont icon-extend' @click='enterFullScreen'></i>
           </div>
         </div>
          <div class="quill-editor"
@@ -56,16 +68,16 @@
 </template>
 
 <script>
+import mPopover from '@/components/popover.vue'
 import mAside from '@/components/aside.vue'
 import mButton from '@/components/button.vue'
 import '@/components/confirm/confirm.js'
 export default {
-  async fetch({ app, store, params }) {
-  },
+  async fetch({ app, store, params }) {},
   async asyncData({ app }) {
     const books = await app.$axios.get('/notebook')
-    const notes = await app.$axios.get('/note',{
-      params: {isTrashed:0}
+    const notes = await app.$axios.get('/note', {
+      params: { isTrashed: 0 }
     })
 
     let noteEditing = {}
@@ -98,9 +110,9 @@ export default {
     }
   },
   created() {
-    this.noteEditing = {...this.currentNote}
+    this.noteEditing = { ...this.currentNote }
   },
-  mounted(){
+  mounted() {
     const currentNote = this.$refs[this.currentNote.id]
     var currentNoteOffsetTop = currentNote && currentNote[0].offsetTop
 
@@ -115,19 +127,34 @@ export default {
         return val && val.length > 20 ? val.substr(0, 20) + '...' : val
       }
     },
-    currentNote(){
+    currentNote() {
       return this.$store.state.currentNote
     }
   },
   methods: {
+    sort(type,sort){
+      this.notes.sort((a,b) => sort === 'DESC' ? b[type] - a[type] : a[type] - b[type])
+    },
+    enterFullScreen() {
+      var de = document.documentElement
+      if (de.requestFullscreen) {
+        de.requestFullscreen()
+      } else if (de.mozRequestFullScreen) {
+        de.mozRequestFullScreen()
+      } else if (de.webkitRequestFullScreen) {
+        de.webkitRequestFullScreen()
+      } else {
+        alert('该浏览器不支持全屏')
+      }
+    },
     async initNotes() {
-      let res = await this.$axios.get('/note',{
-        params: {isTrashed:0}
+      let res = await this.$axios.get('/note', {
+        params: { isTrashed: 0 }
       })
       this.notes = res.data
 
-      let result = res.data.find((v,idx) => {
-        if(this.noteEditing.id === v.id){
+      let result = res.data.find((v, idx) => {
+        if (this.noteEditing.id === v.id) {
           this.active = idx
           return true
         }
@@ -140,10 +167,9 @@ export default {
         }
       }
     },
-    selectBook(){
-    },
+    selectBook() {},
     selectNote(item) {
-      this.$store.dispatch('setCurrentNote',item)
+      this.$store.dispatch('setCurrentNote', item)
       const { title, content, id } = item
       this.noteEditing = {
         title,
@@ -154,16 +180,18 @@ export default {
     addNote() {
       this.editing = true
       this.noteEditing = {
-          title: '',
-          content: '',
-          id:  ''
+        title: '',
+        content: '',
+        id: ''
       }
     },
     deleteNote(id) {
       this.$confirm('确认删除?').then(() => {
-        this.$axios.patch(`/note/trashOrRecover/${id}`,{isTrashed:1}).then(res => {
-          if (res.code === 0) this.initNotes()
-        })
+        this.$axios
+          .patch(`/note/trashOrRecover/${id}`, { isTrashed: 1 })
+          .then(res => {
+            if (res.code === 0) this.initNotes()
+          })
       })
     },
     saveNote() {
@@ -175,39 +203,44 @@ export default {
         }
       })
     },
-    onEditorReady(){},
-    onEditorBlur(editor) {},
+    onEditorReady() {},
+    onEditorBlur(editor, html) {},
     onEditorFocus(editor) {},
     onEditorChange({ editor, html, text }) {
       this.noteEditing.content = html
-       if (this.noteEditing.id) {
-        this.$axios
-          .patch(`/note/update/${this.noteEditing.id}`, this.noteEditing)
-          .then(res => {
-            this.initNotes()
-          })
-      }
+      // if (this.noteEditing.id) {
+      //   this.$axios
+      //     .patch(`/note/update/${this.noteEditing.id}`, this.noteEditing)
+      //     .then(res => {
+      //       this.initNotes()
+      //     })
+      // }
     }
   },
-  components: { mAside, mButton }
+  components: { mAside, mButton, mPopover }
 }
 </script>
 
 <style lang='scss'>
-
+.sort-list {
+  padding: 20px 0;
+  li {
+    margin-bottom: 10px;
+  }
+}
 .container {
   display: flex;
   height: 100%;
   .note-list {
     flex-basis: 300px;
     min-width: 300px;
-    transition: min-width .4s, flex-basis .4s, transform .4s;
+    transition: min-width 0.4s, flex-basis 0.4s, transform 0.4s;
     z-index: 0;
-    &.animate{
-       opacity: 0;
-       transform: translateX(-300px);
-       min-width: 0px;
-       flex-basis: 0px;
+    &.animate {
+      opacity: 0;
+      transform: translateX(-300px);
+      min-width: 0px;
+      flex-basis: 0px;
     }
     .header {
       padding: 20px 20px 10px 20px;
@@ -225,6 +258,7 @@ export default {
         color: #311abf;
       }
     }
+
     .list {
       overflow-y: scroll;
       height: calc(100% - 100px);
@@ -252,11 +286,11 @@ export default {
         justify-content: space-between;
         margin-bottom: 5px;
       }
-      time{
+      time {
         display: inline-block;
-          margin-bottom: 10px;
-          color:#ccc;
-          font-size: 12px;
+        margin-bottom: 10px;
+        color: #ccc;
+        font-size: 12px;
       }
       .content {
         max-width: 200px;

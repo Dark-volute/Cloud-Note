@@ -28,8 +28,18 @@ const NoteModel = sequelize.define(
     tag: STRING,
     clock: DATE,
     isTrashed: BOOLEAN,
-    create_date: DATE,
-    update_date: DATE
+    create_date: {
+      type:DATE,
+      get(){
+        return new Date(this.getDataValue('create_date')).getTime()
+      }
+    },
+    update_date: {
+      type:DATE,
+      get(){
+        return new Date(this.getDataValue('update_date')).getTime()
+      }
+    }
   },
   {
     timestamps: false,
@@ -52,8 +62,8 @@ NoteModel.createNote = async (userId, notebookId, title, content) => {
     title,
     content,
     isTrashed: false,
-    create_date: new Date().getTime(),
-    update_date: new Date().getTime()
+    create_date: Date.now(),
+    update_date: Date.now()
   })
 }
 
@@ -88,20 +98,29 @@ NoteModel.findAllByBookId = async notebookId => {
   return await NoteModel.findAll({
     where: {
       notebookId
-    }
+    },
+    order:[
+      ['update_date','DESC']
+    ]
   })
 }
 
-NoteModel.findAllNotes = async userId => {
+NoteModel.findAllNotes = async (userId) => {
   return await NoteModel.findAll({
     where: {
       userId
-    }
+    },
+    order:[
+      ['update_date','DESC']
+    ]
   })
 }
 
 NoteModel.updateNote = async (noteId, data) => {
-  return await NoteModel.update(data, {
+  return await NoteModel.update(
+    { update_date: Date.now(),
+      ...data
+    }, {
     where: {
       id: noteId
     }

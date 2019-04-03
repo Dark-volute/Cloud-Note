@@ -12,6 +12,7 @@ const NoteController = require('./controller/note')
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
+router.post('/logOut', UserController.logOut)
 router.get('/user', auth(), UserController.user)
 
 

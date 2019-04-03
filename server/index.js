@@ -7,6 +7,8 @@ const handelError = require('./middleware/handleError')
 const app = new Koa()
 require('./model/index.js')
 
+app.keys = ['im a newer secret', 'i like turtle'];
+
 app.use(koaBody());
 
 app.use(handelError())

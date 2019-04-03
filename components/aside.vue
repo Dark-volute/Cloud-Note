@@ -7,27 +7,44 @@
           </li>
             <nuxt-link  to='/' tag='li'><i class='iconfont icon-note'></i></nuxt-link>
             <nuxt-link to='/book' tag='li'><i class='iconfont icon-notebook'></i></nuxt-link>
-          <li>
+          <!-- <li>
              <i class='iconfont icon-tag'></i>
-          </li>
+          </li> -->
           <nuxt-link to='/trash' tag='li'><i class='iconfont icon-trash'></i> </nuxt-link>
            <nuxt-link to='/search' tag='li'><i class='iconfont icon-search'></i> </nuxt-link>
         </ul>
+  
+        <m-popover position="right">
         <div class='user' v-if='user'>
-          {{user.username}}
+          <img src='~assets/images/avatar.png'>
         </div>
+         <template slot="content">
+             <span @click='loginOut'>登出</span>
+         </template>
+</m-popover>
+       
+ 
       </div>
     </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
+import mPopover from '@/components/popover.vue'
 export default {
   computed: {
     user() {
       return this.$store.state.user
     }
-  }
+  },
+  methods: {
+    loginOut(){
+      this.$axios.post('/logOut')
+      this.$router.push('/login')
+      
+    }
+  },
+  components: { mPopover }
 }
 </script>
 
@@ -38,7 +55,6 @@ export default {
   flex-basis: 60px;
   background: #f8f8f8;
   padding: 40px 20px;
-  z-index: 1;
   header {
     color: #fff;
     display: flex;
@@ -46,7 +62,7 @@ export default {
     align-items: center;
     margin-bottom: 40px;
   }
-  .info{
+  .info {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -57,7 +73,7 @@ export default {
     font-size: 12px;
     li {
       cursor: pointer;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       border: 1px solid #ccc;
       border-radius: 50%;
       display: inline-block;
@@ -73,6 +89,14 @@ export default {
       background: #727abd;
       color: #fff;
       border-color: #727abd;
+    }
+  }
+  .user {
+    cursor: pointer;
+    img {
+      height: 45px;
+      width: 45px;
+      display: inline-block;
     }
   }
 }

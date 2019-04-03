@@ -7,7 +7,11 @@
         <input class="search-input" type="text" @input="change" v-model="keyword" placeholder="搜索笔记">
       </div>
       <ul class="search-list" v-show="list && list.length > 0">
-        <li v-for="item in list" v-html="item.content" @click="search(item)"></li>
+        <li  
+        :key='item.id' 
+        v-for="item in list" 
+        v-html="item.content" 
+        @click="search(item)"></li>
       </ul>
     </div>
   </div>

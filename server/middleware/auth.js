@@ -1,6 +1,6 @@
 module.exports = function(){
     return async (ctx, next) => {
-        const userid = ctx.cookies.get('sessionid')
+        const userid = ctx.cookies.get('key')
         if(userid) {
            ctx.userId = userid
            await next()
