@@ -3,10 +3,11 @@ const NoteBookModel = require('../model/notebook')
 
 const createNote = async function (ctx, next) {
   let {title, content, notebookId} = ctx.request.body
-
   if (!notebookId) {
-    const {id} = await NoteBookModel.findDefaultBook()
-    notebookId = id
+    const userId = ctx.userId
+    const book = await NoteBookModel.findDefaultBook(userId)
+    if(!book) ctx.throw(200,'请先建立笔记本')
+    notebookId = book.id
   }
   const userId = ctx.userId
   const note = await NoteModel.createNote(userId, notebookId, title, content)

@@ -66,16 +66,17 @@ NotebookModel.findBooks = async (userId)=> {
 NotebookModel.deleteNotebook = async (id)=> {
    await NotebookModel.destroy({
        where:{
-          id
+        id
        }
    })
 }
 
 
-NotebookModel.findDefaultBook = async function(){
+NotebookModel.findDefaultBook = async function(userId){
     return await NotebookModel.findOne({
         attributes:['id'],
         where: {
+            userId,
             isDefault: 1
         }
     })

@@ -16,16 +16,18 @@ router.post('/register', UserController.register)
 router.post('/login', UserController.login)
 router.post('/logOut', UserController.logOut)
 router.get('/user', auth(), UserController.user)
+router.post('/emailValidate',UserController.emailValidate)
+router.post('/retrievePassword',UserController.retrievePassword)
 
 
-router.post('/notebook/create',auth(), NotebookController.createNotebook)
+router.post('/notebook',auth(), NotebookController.createNotebook)
 router.get('/notebook',auth(), NotebookController.findBooks)
-router.delete('/notebook/delete/:id',auth(), NotebookController.deleteNotebook)
+router.delete('/notebook/:id',auth(), NotebookController.deleteNotebook)
 
 router.get('/note',auth(), NoteController.findAllNotes)
-router.post('/note/create', auth(), NoteController.createNote)
-router.delete('/note/delete/:id',auth(), NoteController.deleteNote)
-router.patch('/note/update/:id',auth(), NoteController.updateNote)
+router.post('/note', auth(), NoteController.createNote)
+router.delete('/note/:id',auth(), NoteController.deleteNote)
+router.patch('/note/:id',auth(), NoteController.updateNote)
 router.patch('/note/trashOrRecover/:id',auth(), NoteController.trashOrRecoverNote)
 
 router.get('/search/:keyword', NoteController.search)

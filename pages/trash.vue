@@ -144,7 +144,7 @@ export default {
     },
     deleteNote() {
       this.$confirm('确认彻底删除?').then(() => {
-        this.$axios.delete(`/note/delete/${this.selected_Id}`).then(res => {
+        this.$axios.delete(`/note/${this.selected_Id}`).then(res => {
           if (res.code === 0) this.initNotes()
         })
       })

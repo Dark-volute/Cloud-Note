@@ -1,5 +1,5 @@
 {
-  "name": "cloud-note",
+  "name": "CloudNote",
   "version": "1.0.0",
   "description": "cloud-note",
   "author": "shel",
@@ -9,17 +9,20 @@
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate",
-    "start2":"pm2 start npm -- run start"
+    "start2": "pm2 start npm -- run start"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^2.6.0",
+    "async-validator": "^1.11.2",
     "cross-env": "^5.2.0",
     "koa": "^2.6.2",
     "koa-body": "^4.1.0",
     "koa-router": "^7.4.0",
     "mysql2": "^1.6.5",
+    "nodemailer": "^6.1.1",
     "nuxt": "^2.4.0",
+    "redis": "^2.8.0",
     "sequelize": "^5.1.0",
     "vue-quill-editor": "^3.0.6"
   },

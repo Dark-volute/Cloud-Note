@@ -5,15 +5,12 @@
           <li style='color:#ffbd39'>
             <i class='iconfont icon-star'></i>
           </li>
-            <nuxt-link  to='/' tag='li'><i class='iconfont icon-note'></i></nuxt-link>
+            <nuxt-link  to='/main' tag='li'><i class='iconfont icon-note'></i></nuxt-link>
             <nuxt-link to='/book' tag='li'><i class='iconfont icon-notebook'></i></nuxt-link>
-          <!-- <li>
-             <i class='iconfont icon-tag'></i>
-          </li> -->
-          <nuxt-link to='/trash' tag='li'><i class='iconfont icon-trash'></i> </nuxt-link>
+            <nuxt-link to='/trash' tag='li'><i class='iconfont icon-trash'></i> </nuxt-link>
            <nuxt-link to='/search' tag='li'><i class='iconfont icon-search'></i> </nuxt-link>
         </ul>
-  
+
         <m-popover position="right">
         <div class='user' v-if='user'>
           <img src='~assets/images/avatar.png'>
@@ -22,8 +19,8 @@
              <span @click='loginOut'>登出</span>
          </template>
 </m-popover>
-       
- 
+
+
       </div>
     </div>
 </template>
@@ -41,7 +38,7 @@ export default {
     loginOut(){
       this.$axios.post('/logOut')
       this.$router.push('/login')
-      
+
     }
   },
   components: { mPopover }

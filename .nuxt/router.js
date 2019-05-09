@@ -3,10 +3,13 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 
 const _25f501c2 = () => interopDefault(import('../pages/book.vue' /* webpackChunkName: "pages/book" */))
-const _51bf49ba = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
+const _750861ef = () => interopDefault(import('../pages/main.vue' /* webpackChunkName: "pages/main" */))
 const _4d5d22de = () => interopDefault(import('../pages/search.vue' /* webpackChunkName: "pages/search" */))
 const _f784411c = () => interopDefault(import('../pages/trash.vue' /* webpackChunkName: "pages/trash" */))
 const _0d78b80c = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+const _3364aeb4 = () => interopDefault(import('../pages/index/login.vue' /* webpackChunkName: "pages/index/login" */))
+const _0059e5ca = () => interopDefault(import('../pages/index/retrievePassword.vue' /* webpackChunkName: "pages/index/retrievePassword" */))
+const _cdcde3e0 = () => interopDefault(import('../pages/index/sign.vue' /* webpackChunkName: "pages/index/sign" */))
 
 Vue.use(Router)
 
@@ -87,9 +90,9 @@ export function createRouter() {
       component: _25f501c2,
       name: "book"
     }, {
-      path: "/login",
-      component: _51bf49ba,
-      name: "login"
+      path: "/main",
+      component: _750861ef,
+      name: "main"
     }, {
       path: "/search",
       component: _4d5d22de,
@@ -101,7 +104,20 @@ export function createRouter() {
     }, {
       path: "/",
       component: _0d78b80c,
-      name: "index"
+      name: "index",
+      children: [{
+        path: "login",
+        component: _3364aeb4,
+        name: "index-login"
+      }, {
+        path: "retrievePassword",
+        component: _0059e5ca,
+        name: "index-retrievePassword"
+      }, {
+        path: "sign",
+        component: _cdcde3e0,
+        name: "index-sign"
+      }]
     }],
 
     fallback: false

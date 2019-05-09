@@ -2,7 +2,7 @@ class ValidationError extends Error {
     constructor(msg, httpStatusCode,code) {
       super(msg);
       this.msg = msg;
-      this.httpStatusCode = httpStatusCode || 500;
+      this.httpStatusCode = httpStatusCode || 200;
       this.code = code || -1;
     }
   }

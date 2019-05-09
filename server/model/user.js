@@ -44,7 +44,7 @@ const UserModel = sequelize.define('user', {
 }, {
     indexes: [
         {
-            fields: ['username'],
+            fields: ['username','email'],
             unique: true
         }
     ]
@@ -60,20 +60,22 @@ UserModel.register = async (username ,password,email)=> {
         }
     })
     if(user) throw new Errors.ValidationError('用户名存在')
-    
+
     const {cryptedPassword, salt} = await genCryptedPassword(password)
-    return await UserModel.create({
+    const {id} = await UserModel.create({
         id: uuid(),
         username,
+        email,
         password:cryptedPassword,
         salt
     })
+    return {username,email,id}
 }
 
 
 UserModel.login = async (username ,password)=> {
     const user =  await UserModel.findOne({
-        attributes:['password','id','salt','username'],
+        attributes:['password','id','salt','username','email'],
         where: {
             username
         }
@@ -84,7 +86,9 @@ UserModel.login = async (username ,password)=> {
 
     if(user.password !== cryptedPassword) throw new Errors.ValidationError('密码错误')
 
-    return user 
+    const {email,id} = user
+
+    return {username,email,id}
 }
 
 UserModel.user = async (userId)=> {
@@ -93,6 +97,19 @@ UserModel.user = async (userId)=> {
             id: userId
         }
     })
+}
+
+UserModel.retrievePassword = async (email,password) => {
+    const {cryptedPassword, salt} = await genCryptedPassword(password)
+    return await UserModel.update(
+        {
+            password: cryptedPassword, 
+            salt
+        }, {
+        where: {
+           email
+        }
+      })
 }
 
 module.exports = UserModel

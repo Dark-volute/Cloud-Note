@@ -13,22 +13,22 @@
                 <span class='describe'>{{item.isDefault ? '默认' : ''}} {{item.describe}}</span>
                 </div>
                 <span @click='deleteBook(item.id)'>x</span>
-            </li> 
+            </li>
         </ul>
     </div>
     <m-layer :visible='visible' class='layer'>
             <h2>添加笔记</h2>
             <div class='book-describe'>
                 <input placeholder="笔记名" v-model='bookname'>
-                <input placeholder="描述" v-model='describe'>   
+                <input placeholder="描述" v-model='describe'>
             </div>
             <div class='btns'>
                 <m-button @click='visible = false'>取消</m-button>
-                <m-button @click='createbook'>创建</m-button> 
+                <m-button @click='createbook'>创建</m-button>
             </div>
     </m-layer>
 </div>
-    
+
 </template>
 <script>
 import mAside from '@/components/aside.vue'
@@ -59,7 +59,7 @@ export default {
     },
     createbook() {
       this.$axios
-        .post('/notebook/create', {
+        .post('/notebook', {
           describe: this.describe,
           bookname: this.bookname
         })
@@ -69,7 +69,7 @@ export default {
         })
     },
     deleteBook(id) {
-      this.$axios.delete(`/notebook/delete/${id}`).then(res => {
+      this.$axios.delete(`/notebook/${id}`).then(res => {
             this.getBooks()
       })
     }
