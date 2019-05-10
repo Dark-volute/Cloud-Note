@@ -1,5 +1,6 @@
 <template>
     <div>
+        <transition name='dialog-fade'>
     <div class='m-confirm' v-show='visible'>
         <div class='m-confirm--container'>
             <div class='header'>
@@ -15,7 +16,8 @@
             </div>
         </div>
     </div>
-        <div class="m-modal" v-show='visible'></div>
+    </transition>
+        <div class="m-mask" v-show='visible'></div>
     </div>
 </template>
 
@@ -97,9 +99,9 @@
         cursor: pointer;
       }
       .confirm {
-        background: #409eff;
+        background: #7568f3;
         color: #fff;
-        border: 1px solid #409eff;
+        border: 1px solid #7568f3;
         margin-left: 6px;
       }
       .cancel{
@@ -109,7 +111,15 @@
   }
 }
 
-.m-modal{
+@keyframes mask {
+  from {
+    opacity: .2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.m-mask{
   position: fixed;
   left: 0;
   top: 0;
@@ -117,8 +127,19 @@
   border-bottom: 0;
   width: 100%;
   height: 100%;
-  opacity: .5;
-  background: #000;
+  background: fade_out(#000,0.5);
   z-index: 98;
+  animation: mask .2s;
 }
+
+
+.dialog-fade-enter-active,.dialog-fade-leave-active {
+  transition: all .3s ease;
+}
+
+.dialog-fade-enter, .dialog-fade-leave-to {
+  transform: translate(-50%,-60%);
+  opacity: .2;
+}
+
 </style>

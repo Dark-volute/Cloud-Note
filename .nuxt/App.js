@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import NuxtLoading from './components/nuxt-loading.vue'
 
 import '../assets/css/main.css'
 
@@ -17,7 +16,6 @@ export default {
   head: {"title":"CloudNote","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"cloud-note"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","href":"http:\u002F\u002Fat.alicdn.com\u002Ft\u002Ffont_1088310_wo6ymxfu0eq.css"}],"style":[],"script":[]},
 
   render(h, props) {
-    const loadingEl = h('NuxtLoading', { ref: 'loading' })
     const layoutEl = h(this.layout || 'nuxt')
     const templateEl = h('div', {
       domProps: {
@@ -46,7 +44,7 @@ export default {
         id: '__nuxt'
       }
     }, [
-      loadingEl,
+
       transitionEl
     ])
   },
@@ -73,13 +71,6 @@ export default {
     this.error = this.nuxt.error
   },
 
-  mounted() {
-    this.$loading = this.$refs.loading
-  },
-  watch: {
-    'nuxt.err': 'errorChanged'
-  },
-
   computed: {
     isOffline() {
       return !this.isOnline
@@ -99,14 +90,9 @@ export default {
       }
     },
 
-    errorChanged() {
-      if (this.nuxt.err && this.$loading) {
-        if (this.$loading.fail) this.$loading.fail()
-        if (this.$loading.finish) this.$loading.finish()
-      }
-    },
-
     setLayout(layout) {
+      if(layout && typeof layout !== 'string') throw new Error('[nuxt] Avoid using non-string value as layout property.')
+
       if (!layout || !layouts['_' + layout]) {
         layout = 'default'
       }
@@ -122,6 +108,5 @@ export default {
     }
   },
   components: {
-    NuxtLoading
   }
 }

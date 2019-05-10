@@ -52,6 +52,8 @@ export default {
   flex-basis: 60px;
   background: #f8f8f8;
   padding: 40px 20px;
+  position: relative;
+  z-index: 2;
   header {
     color: #fff;
     display: flex;

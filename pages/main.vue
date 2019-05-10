@@ -4,13 +4,17 @@
       <div class='note-list' :class={animate:editing}>
         <div class='header'>
           <div class='row'>
-              <h3>全部笔记 <i @click='selectBook' class='iconfont icon-arrow-bottom'></i></h3>
+              <m-popover position="bottom">
+              <h3>{{currentBook.name}} <i class='iconfont icon-arrow-bottom'></i></h3>
+               <template slot="content">
+                 <ul>
+                   <li @click='selectBook()'>全部笔记</li>
+                    <li @click='selectBook(book)' v-for='book in books' :key='book.id'>{{book.bookname}}</li>
+                </ul>   
+               </template>
+             </m-popover>
               <i @click='addNote' class='iconfont icon-add-note' style='color:#311abf;font-size:24px'></i>
           </div>
-          <!-- <ul>
-            <li v-for='item in books'>{{item.bookname}}</li>
-          </ul> -->
-
       <div class='row'>
          <h6>2条笔记</h6>
        <m-popover position="bottom">
@@ -44,14 +48,17 @@
             <i class='iconfont icon-notebook'></i>
             <span>笔记本</span>
             <i class='iconfont icon-tag'></i>
-            <input type='text' placeholder="标题"  v-model='noteEditing.title'/>
+            <input type='text' 
+            placeholder="标题"  
+            v-model='noteEditing.title'
+            @change='updateNote'/>
           </div>
            <div class='right'>
-             <m-button @click='saveNote' v-show='editing'>完成</m-button>
-             <m-button @click='editing=false' v-show='editing'>取消</m-button>
+             <m-button @click='saveNote' v-show='editing'>保存</m-button>
+             <m-button @click='cancelEditing' v-show='editing'>取消</m-button>
              <i class='iconfont icon-clock'></i>
             <i class='iconfont icon-star'></i>
-             <i class='iconfont icon-trash'></i>
+             <i class='iconfont icon-trash' @click='deleteNote(noteEditing.id)'></i>
              <i class='iconfont icon-extend' @click='enterFullScreen'></i>
           </div>
         </div>
@@ -72,6 +79,7 @@ import mPopover from '@/components/popover.vue'
 import mAside from '@/components/aside.vue'
 import mButton from '@/components/button.vue'
 import '@/components/confirm/confirm.js'
+import '@/components/message/message.js'
 export default {
   async fetch({ app, store, params }) {},
   async asyncData({ app }) {
@@ -99,13 +107,16 @@ export default {
     return {
       editing: false,
       editorOption: {
-        // some quill options
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block']
           ]
         }
+      },
+      currentBook:{
+        id: null,
+        name:'全部笔记'
       }
     }
   },
@@ -132,8 +143,10 @@ export default {
     }
   },
   methods: {
-    sort(type,sort){
-      this.notes.sort((a,b) => sort === 'DESC' ? b[type] - a[type] : a[type] - b[type])
+    sort(type, sort) {
+      this.notes.sort(
+        (a, b) => (sort === 'DESC' ? b[type] - a[type] : a[type] - b[type])
+      )
     },
     enterFullScreen() {
       var de = document.documentElement
@@ -167,7 +180,20 @@ export default {
         }
       }
     },
-    selectBook() {},
+    async selectBook(book) {
+      if(!book) {
+        this.currentBook = {
+          name: '全部笔记',
+          id:''
+        }
+        this.initNotes()
+        return
+      }
+      this.currentBook.name = book.bookname
+      this.currentBook.id = book.id
+      const res = await this.$axios.get(`/note/${book.id}`)
+      this.notes = res.data
+    },
     selectNote(item) {
       this.$store.dispatch('setCurrentNote', item)
       const { title, content, id } = item
@@ -185,7 +211,16 @@ export default {
         id: ''
       }
     },
+    cancelEditing() {
+      this.editing = false
+      this.noteEditing = {
+        title: '',
+        content: '',
+        id: ''
+      }
+    },
     deleteNote(id) {
+      if (!id) return
       this.$confirm('确认删除?').then(() => {
         this.$axios
           .patch(`/note/trashOrRecover/${id}`, { isTrashed: 1 })
@@ -195,26 +230,34 @@ export default {
       })
     },
     saveNote() {
+      if(! this.noteEditing.notebookId) this.noteEditing.notebookId = this.currentBook.id
       this.$axios.post('/note', this.noteEditing).then(res => {
         if (res.code === 0) {
           this.editing = false
           this.noteEditing.id = res.data.id
-          this.initNotes()
+          this.notes.push(res.data)
+        } else {
+          this.$message.error(res.message)
         }
       })
+    },
+    updateNote() {
+      if (this.noteEditing.id) {
+        this.$axios
+          .patch(`/note/${this.noteEditing.id}`, this.noteEditing)
+          .then(res => {
+            this.initNotes()
+          })
+      }
     },
     onEditorReady() {},
     onEditorBlur(editor, html) {},
     onEditorFocus(editor) {},
     onEditorChange({ editor, html, text }) {
+      if (html !== this.noteEditing.content) {
+        this.updateNote()
+      }
       this.noteEditing.content = html
-      // if (this.noteEditing.id) {
-      //   this.$axios
-      //     .patch(`/note/update/${this.noteEditing.id}`, this.noteEditing)
-      //     .then(res => {
-      //       this.initNotes()
-      //     })
-      // }
     }
   },
   components: { mAside, mButton, mPopover }
@@ -235,7 +278,6 @@ export default {
     flex-basis: 300px;
     min-width: 300px;
     transition: min-width 0.4s, flex-basis 0.4s, transform 0.4s;
-    z-index: 0;
     &.animate {
       opacity: 0;
       transform: translateX(-300px);
@@ -299,14 +341,15 @@ export default {
     }
   }
   .editor {
-    flex-basis: 100%;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    height: calc(100% - 90px);
     .header {
       display: flex;
       justify-content: space-between;
       border-left: 1px solid #ccc;
-      padding: 10px 20px;
+      padding: 15px 20px;
     }
   }
 }

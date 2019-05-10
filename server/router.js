@@ -25,6 +25,8 @@ router.get('/notebook',auth(), NotebookController.findBooks)
 router.delete('/notebook/:id',auth(), NotebookController.deleteNotebook)
 
 router.get('/note',auth(), NoteController.findAllNotes)
+router.get('/note/:bookId',auth(), NoteController.findAllByBookId)
+
 router.post('/note', auth(), NoteController.createNote)
 router.delete('/note/:id',auth(), NoteController.deleteNote)
 router.patch('/note/:id',auth(), NoteController.updateNote)

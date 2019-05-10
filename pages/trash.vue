@@ -152,11 +152,13 @@ export default {
   },
   mounted() {
     document.addEventListener('mouseup',(e)=>{
-       this.isMoving = false
+      this.isMoving = false
       current.style.top = posTop + 'px'
       current.style.left =  posLeft + 'px'
       current.classList.remove('dropStyle')
     })
+  },
+  beforeDestroy() {
   },
   components: { mAside, mButton }
 }

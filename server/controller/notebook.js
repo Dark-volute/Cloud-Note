@@ -16,7 +16,6 @@ const createNotebook = async function(ctx, next){
 const deleteNotebook = async function(ctx, next){
     const id = ctx.params.id
     const notes = await NoteModel.findAllByBookId(id)
-    console.log(id,notes,123)
     if(notes && notes.length > 0) ctx.throw(500,'笔记还存在笔记')
     const book = await NotebookModel.deleteNotebook(id)
     ctx.body = {

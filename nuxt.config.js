@@ -23,14 +23,13 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: false,
 
   /*
   ** Global CSS
   */
   css: [
     '@/assets/css/main.css',
-
     'quill/dist/quill.snow.css',
     'quill/dist/quill.bubble.css',
     'quill/dist/quill.core.css',
@@ -58,7 +57,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL:'http://note.xiemengyang.site/api',
+    baseURL: 'http://note.xiemengyang.site/api',
   },
 
   /*

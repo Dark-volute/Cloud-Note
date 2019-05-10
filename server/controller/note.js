@@ -32,12 +32,23 @@ const findAllNotes = async function (ctx, next) {
   const {isTrashed} = ctx.request.query
   const found = await NoteModel.findAllNotes(userId)
   const notes = found.filter(v => v.isTrashed == isTrashed)
-
   ctx.body = {
     code: 0,
     data: notes
   }
 }
+
+const findAllByBookId = async function (ctx, next) {
+  const bookId = ctx.params.bookId
+  const found = await NoteModel.findAllByBookId(bookId)
+  const notes = found.filter(v => v.isTrashed == 0)
+  ctx.body = {
+    code: 0,
+    data: notes
+  }
+}
+
+
 
 
 const updateNote = async function (ctx, next) {
@@ -71,11 +82,14 @@ const search = async function (ctx, next) {
 }
 
 
+
+
 module.exports = {
   createNote,
   deleteNote,
   findAllNotes,
   updateNote,
   search,
-  trashOrRecoverNote
+  trashOrRecoverNote,
+  findAllByBookId
 }

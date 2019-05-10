@@ -19,6 +19,12 @@ const  createAlert = (message,title)=>{
     document.body.appendChild(instance.$el)
   }
 
+const createMask = () => {
+    const div = document.createElement('div')
+    div.classList.add('m-mask')
+    document.body.appendChild(div)
+}
+
 function destroy(){
     if(instance) {
         instance.visible = false;

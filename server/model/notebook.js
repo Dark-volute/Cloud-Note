@@ -62,7 +62,6 @@ NotebookModel.findBooks = async (userId)=> {
 }
 
 
-
 NotebookModel.deleteNotebook = async (id)=> {
    await NotebookModel.destroy({
        where:{

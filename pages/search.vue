@@ -36,7 +36,7 @@
       },
       search(item){
         this.$store.dispatch('setCurrentNote',item)
-        this.$router.push('/')
+        this.$router.push('/main')
       }
     }
   }
