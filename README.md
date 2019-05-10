@@ -1,6 +1,6 @@
-# cloud-note
+# Cloud-Note
 
-> cloud-note
+> 基于 Nuxt koa2 mysql redis [Moon](http://moon.xiemengyang.site) 打造的前后端同构demo [http://note.xiemengyang.site](http://note.xiemengyang.site)
 
 ## Build Setup
 
@@ -19,4 +19,3 @@ $ yarn start
 $ yarn run generate
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
