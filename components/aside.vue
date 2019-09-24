@@ -53,7 +53,7 @@ export default {
   background: #f8f8f8;
   padding: 40px 20px;
   position: relative;
-  z-index: 2;
+  z-index: 1;
   header {
     color: #fff;
     display: flex;

@@ -142,6 +142,7 @@
   }
   .content-wrapper {
     position: absolute;
+    z-index: 2;
     border: 1px solid $border-color;
     border-radius: $border-radius;
     // filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));

@@ -116,13 +116,16 @@ export default {
         border-radius: 20px;
         background: #7336ff;
         color: #fff;
-      
         cursor: pointer;
+        margin-bottom: 12px;
+      }
+      .login-group{
+        margin-bottom: 12px;
+        text-align: center;
       }
       .sign-up {
         text-align: center;
         font-size: 12px;
-        margin-top: 20px;
         span {
           color: #7568f3;
           cursor: pointer;

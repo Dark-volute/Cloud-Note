@@ -54,7 +54,7 @@ UserModel.sync()
 
 
 UserModel.register = async (username ,password,email)=> {
-    const user =  await UserModel.findOne({
+  const user =  await UserModel.findOne({
         where: {
             username
         }
@@ -62,7 +62,10 @@ UserModel.register = async (username ,password,email)=> {
     if(user) throw new Errors.ValidationError('用户名存在')
 
     const {cryptedPassword, salt} = await genCryptedPassword(password)
-    const {id} = await UserModel.create({
+
+  console.log(username, cryptedPassword, email);
+
+  const {id} = await UserModel.create({
         id: uuid(),
         username,
         email,
@@ -103,7 +106,7 @@ UserModel.retrievePassword = async (email,password) => {
     const {cryptedPassword, salt} = await genCryptedPassword(password)
     return await UserModel.update(
         {
-            password: cryptedPassword, 
+            password: cryptedPassword,
             salt
         }, {
         where: {

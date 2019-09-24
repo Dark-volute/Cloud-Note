@@ -11,14 +11,14 @@ const NoteController = require('./controller/note')
 
 
 
-
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
 router.post('/logOut', UserController.logOut)
 router.get('/user', auth(), UserController.user)
 router.post('/emailValidate',UserController.emailValidate)
 router.post('/retrievePassword',UserController.retrievePassword)
-
+router.get('/loginByGithub',UserController.loginByGithub)
+router.get('/github/user',UserController.getUserByGithub)
 
 router.post('/notebook',auth(), NotebookController.createNotebook)
 router.get('/notebook',auth(), NotebookController.findBooks)
@@ -33,6 +33,9 @@ router.patch('/note/:id',auth(), NoteController.updateNote)
 router.patch('/note/trashOrRecover/:id',auth(), NoteController.trashOrRecoverNote)
 
 router.get('/search/:keyword', NoteController.search)
+
+
+
 
 
 

@@ -16,7 +16,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'http://at.alicdn.com/t/font_1088310_wo6ymxfu0eq.css' }
+      { rel: 'stylesheet', href: 'http://at.alicdn.com/t/font_1088310_v49ch3cufdi.css' }
     ]
   },
 
@@ -57,7 +57,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: 'http://note.xiemengyang.site/api',
+    baseURL: 'http://localhost:3000/api'|| 'http://note.xiemengyang.site/api',
   },
 
   /*
@@ -68,7 +68,7 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-      
+
     }
   },
   router: {
