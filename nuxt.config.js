@@ -57,7 +57,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: 'http://localhost:3000/api'|| 'http://note.xiemengyang.site/api',
+    baseURL: 'http://note.xiemengyang.site/api'
   },
 
   /*
