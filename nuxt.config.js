@@ -1,6 +1,7 @@
 const pkg = require('./package')
 
 
+
 module.exports = {
   mode: 'universal',
 
@@ -57,7 +58,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: 'http://note.xiemengyang.site/api'
+    baseURL: process.env.NODE_ENV  === 'development' ? 'http://localhost:3000/api' : 'http://note.xiemengyang.site/api'
   },
 
   /*
